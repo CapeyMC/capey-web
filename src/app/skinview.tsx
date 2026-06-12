@@ -9,13 +9,14 @@ type props = {
     height: number,
     width: number,
     disableControls?: boolean,
+    disableZoom?: boolean,
     angled?: boolean,
     hands?: boolean,
     handsOut?: boolean,
     className?: string,
 }
 
-export default function SkinView({ skinUrl, capeUrl, height, width, disableControls, angled, hands, handsOut, className }: props) {
+export default function SkinView({ skinUrl, capeUrl, height, width, disableControls, disableZoom, angled, hands, handsOut, className }: props) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -28,6 +29,8 @@ export default function SkinView({ skinUrl, capeUrl, height, width, disableContr
             enableControls: !disableControls,
         });
 
+        viewer.controls.enableZoom = !disableZoom === undefined ? true : !disableZoom;
+
         if (angled) {
             viewer.autoRotate = false;
 
@@ -37,6 +40,7 @@ export default function SkinView({ skinUrl, capeUrl, height, width, disableContr
 
             viewer.camera.position.set(0, 10, 40);
         }
+
 
         if (handsOut) {
             viewer.playerObject.skin.leftArm.rotation.z = 0.15;
@@ -49,7 +53,7 @@ export default function SkinView({ skinUrl, capeUrl, height, width, disableContr
         }
 
         return () => viewer.dispose();
-    }, [skinUrl, capeUrl, width, height, disableControls, angled, hands, handsOut]);
+    }, [skinUrl, capeUrl, width, height, disableControls, disableZoom, angled, hands, handsOut]);
 
     return (
         <>
